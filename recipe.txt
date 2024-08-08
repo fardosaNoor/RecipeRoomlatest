@@ -1,0 +1,253 @@
+missing areas:
+-search button not working properly i.e it only shows the recently added recipes it does not show the hardcoded recipes 
+-editing the recipes 
+-the footer is well connected to the contact and edited 
+-the suggestion of adding a new page of recipe suggestions 
+
+/*const recipeGrid = document.getElementById('recipeGrid');
+const searchInput = document.getElementById('searchInput');
+const searchButton = document.getElementById('searchButton');
+const recipeLinks = document.querySelectorAll('.recipe-link');
+const addRecipeForm = document.getElementById('addRecipeForm');
+const addRecipeSection = document.querySelector('.add-recipe-section');
+const addRecipeLink = document.getElementById('addRecipeLink');
+const recipeImageUrl = document.getElementById('recipeImageUrl');
+const recipeImageFile = document.getElementById('recipeImageFile');
+const dragDropArea = document.getElementById('dragDropArea');
+
+// Recipe class to handle recipe objects
+class Recipe {
+    constructor(name, imageUrl, ingredients, category) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.ingredients = ingredients;
+        this.category = category;
+    }
+}
+
+// Sample recipes array
+const sampleRecipes = [
+    { name: 'Spaghetti Carbonara', imageUrl: 'images/spagheti.jpg', ingredients: 'Spaghetti, eggs, pancetta, Parmesan cheese, black pepper', category: 'Dinner' },
+    { name: 'Classic Pancakes', imageUrl: 'images/pancake.jpg', ingredients: 'Flour, eggs, milk, sugar, butter', category: 'Breakfast' },
+    { name: 'Caesar Salad', imageUrl: 'images/ceasorsalad.jpg', ingredients: 'Romaine lettuce, croutons, Caesar dressing, Parmesan cheese', category: 'Lunch' },
+    { name: 'Chocolate Chip Cookies', imageUrl: 'images/recipeimge.jpg', ingredients: 'Flour, sugar, chocolate chips, butter, eggs', category: 'Snacks' },
+    { name: 'Mojito', imageUrl: 'images/smoothie.jpg', ingredients: 'Rum, lime, mint, sugar, soda water', category: 'Drinks' }
+];
+
+// UI class to handle user interface interactions
+class UI {
+    static displayRecipes() {
+        const recipes = Store.getRecipes();
+        recipes.forEach((recipe) => UI.addRecipeToList(recipe));
+    }
+
+    static addRecipeToList(recipe) {
+        const grid = document.querySelector('#recipeGrid');
+        const recipeDiv = document.createElement('div');
+        recipeDiv.className = 'recipe';
+        recipeDiv.innerHTML = `
+            <div class="recipe-image">
+                <img src="${recipe.imageUrl}" alt="${recipe.name}">
+            </div>
+            <div class="recipe-details">
+                <div class="recipe-category">${recipe.category}</div>
+                <div class="recipe-name">${recipe.name}</div>
+                <div class="recipe-ingredients">${recipe.ingredients}</div>
+            </div>
+            <div class="recipe-actions">
+                <button class="delete">Remove</button>
+            </div>
+        `;
+        grid.appendChild(recipeDiv);
+    }
+
+    static deleteRecipe(el) {
+        if (el.classList.contains('delete')) {
+            el.parentElement.parentElement.remove();
+        }
+    }
+
+    static clearFields() {
+        document.querySelector('#recipeName').value = '';
+        document.querySelector('#recipeImageUrl').value = '';
+        document.querySelector('#recipeIngredients').value = '';
+        document.querySelector('#recipeCategory').value = '';
+    }
+}
+
+// Event listener for search button
+document.getElementById('searchButton').addEventListener('click', handleSearch);
+
+function handleSearch() {
+    const searchInputValue = searchInput.value.toLowerCase();
+    const recipes = Store.getRecipes();
+
+    recipeGrid.innerHTML = '';
+
+    const results = recipes.filter(recipe => recipe.name.toLowerCase().includes(searchInputValue));
+    if (results.length > 0) {
+        results.forEach(recipe => UI.addRecipeToList(recipe));
+    } else {
+        recipeGrid.innerHTML = '<p>No recipes found.</p>';
+    }
+}
+
+// Function to display random recipes
+function displayRandomRecipes() {
+    const shuffledRecipes = sampleRecipes.sort(() => 0.5 - Math.random());
+    const randomRecipes = shuffledRecipes.slice(0, 4);
+
+    recipeGrid.innerHTML = '';
+    randomRecipes.forEach(recipe => UI.addRecipeToList(recipe));
+}
+
+// Function to display recipes by category
+function displayRecipesByCategory(category) {
+    let filteredRecipes;
+
+    if (category === 'Explore') {
+        displayRandomRecipes();
+        return;
+    } else {
+        filteredRecipes = sampleRecipes.filter(recipe => recipe.category === category);
+    }
+
+    recipeGrid.innerHTML = '';
+    filteredRecipes.forEach(recipe => UI.addRecipeToList(recipe));
+}
+
+// Call this function on page load
+document.addEventListener('DOMContentLoaded', displayRandomRecipes);
+
+// Store class to handle local storage
+class Store {
+    static getRecipes() {
+        let recipes;
+        if (localStorage.getItem('recipes') === null) {
+            recipes = [];
+        } else {
+            recipes = JSON.parse(localStorage.getItem('recipes'));
+        }
+        return recipes;
+    }
+
+    static addRecipe(recipe) {
+        const recipes = Store.getRecipes();
+        recipes.push(recipe);
+        localStorage.setItem('recipes', JSON.stringify(recipes));
+    }
+
+    static removeRecipe(name) {
+        let recipes = Store.getRecipes();
+        recipes = recipes.filter(recipe => recipe.name !== name);
+        localStorage.setItem('recipes', JSON.stringify(recipes));
+    }
+}
+
+// Event: Display Recipes
+document.addEventListener('DOMContentLoaded', UI.displayRecipes);
+
+// Event: Add a Recipe
+addRecipeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.querySelector('#recipeName').value;
+    const imageUrl = document.querySelector('#recipeImageUrl').value;
+    const ingredients = document.querySelector('#recipeIngredients').value;
+    const category = document.querySelector('#recipeCategory').value;
+
+    if (name === '' || ingredients === '' || category === '') {
+        alert('Please fill in all fields');
+    } else {
+        const recipe = new Recipe(name, imageUrl, ingredients, category);
+        UI.addRecipeToList(recipe);
+        Store.addRecipe(recipe);
+        alert('Recipe Added');
+        UI.clearFields();
+    }
+});
+
+// Event: Remove a Recipe
+recipeGrid.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete')) {
+        UI.deleteRecipe(e.target);
+        Store.removeRecipe(e.target.parentElement.parentElement.querySelector('.recipe-name').textContent);
+        alert('Recipe Removed');
+    }
+});
+
+// Event: Filter recipes by category
+recipeLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const category = e.target.textContent;
+        displayRecipesByCategory(category);
+    });
+});
+
+// Handle 'Add New Recipe' link click for smooth scrolling
+addRecipeLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (addRecipeSection.classList.contains('hidden')) {
+        addRecipeSection.classList.remove('hidden');
+        addRecipeSection.classList.add('open');
+        addRecipeSection.style.maxHeight = addRecipeSection.scrollHeight + "px";
+        addRecipeSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        addRecipeSection.style.maxHeight = "0";
+        addRecipeSection.classList.remove('open');
+        addRecipeSection.classList.add('hidden');
+    }
+});
+
+// Handle image URL input and file upload for recipe images
+recipeImageUrl.addEventListener('input', () => {
+    const url = recipeImageUrl.value;
+    if (url) {
+        recipePreview.src = url;
+        recipePreview.style.display = 'block';
+    } else {
+        recipePreview.style.display = 'none';
+    }
+});
+
+recipeImageFile.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            recipeImageUrl.value = e.target.result;
+            recipePreview.src = e.target.result;
+            recipePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Handle drag and drop for image uploads
+dragDropArea.addEventListener('dragover', function(event) {
+    event.preventDefault();
+    dragDropArea.classList.add('drag-over');
+});
+
+dragDropArea.addEventListener('dragleave', function(event) {
+    event.preventDefault();
+    dragDropArea.classList.remove('drag-over');
+});
+
+dragDropArea.addEventListener('drop', function(event) {
+    event.preventDefault();
+    dragDropArea.classList.remove('drag-over');
+
+    const file = event.dataTransfer.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            recipeImageUrl.value = e.target.result;
+            recipePreview.src = e.target.result;
+            recipePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+*/

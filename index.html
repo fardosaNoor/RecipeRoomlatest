@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeRoom</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"></script>
+
+    <link rel="stylesheet" href="newstyles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">RecipeRoom</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#recipes">Recipes</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#login" id="loginLink">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!--main content-->
+    <section id="home" class="landing-page">
+        <div class="welcome-container">
+            <h1>Welcome to RecipeRoom</h1>
+            <p>Discover, share, and savor delightful recipes from around the world. Whether you're a novice or a seasoned chef, our community-driven platform is here to inspire your culinary journey. Enjoy cooking!</p>
+            <a href="#recipes" class="enjoy-button">Explore Recipes</a>
+        </div>
+    </section>
+    <section id="recipes" class="recipes-section">
+        <div class="recipes-header">
+            <h2>Explore Recipes</h2>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search recipes...">
+                <button id="searchButton">Search</button>
+            </div>
+            <div class="recipe-links">
+                <a href="#" id="allRecipesLink" class="recipe-link active">Explore</a>
+                <a href="#" id="breakfastRecipesLink" class="recipe-link">Breakfast</a>
+                <a href="#" id="lunchRecipesLink" class="recipe-link">Lunch</a>
+                <a href="#" id="dinnerRecipesLink" class="recipe-link">Dinner</a>
+                <a href="#" id="snackRecipesLink" class="recipe-link">Snacks</a>
+                <a href="#" id="drinkRecipesLink" class="recipe-link">Drinks</a>
+                <a href="#addRecipeSection" class="recipe-actions" id="addRecipeLink">Add New Recipe</a>
+            </div>
+        </div>
+        <div id="recipeGrid" class="recipe-grid">
+            <!-- Recipes will be dynamically added here -->
+        </div>
+    </section>
+<!-- Recipe Modal -->
+<div id="recipeModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2 id="modalRecipeName"></h2>
+        <div class="modal-recipe-image">
+            <img id="modalRecipeImage" src="" alt="">
+        </div>
+        <div class="modal-recipe-details">
+            <div class="modal-recipe-category" id="modalRecipeCategory"></div>
+            <div class="modal-recipe-ingredients" id="modalRecipeIngredients"></div>
+            <div class="modal-recipe-description" id="modalRecipeDescription"></div>
+            <div class="modal-recipe-cookingProcess" id="modalRecipeCookingProcess"></div>
+        </div>
+        <button id="addToLibraryButton" class="add-to-library-button">Add to Library</button>
+    </div>
+</div>
+
+    
+    <section class="add-recipe-section hidden" id="addRecipeSection">
+        <h2>Add New Recipe</h2>
+        <form id="addRecipeForm">
+            <div class="form-group">
+                <label for="recipeName">Recipe Name:</label>
+                <input type="text" id="recipeName" name="recipeName" required>
+            </div>
+            <div class="form-group">
+                <label for="recipeImageUrl">Recipe Image URL:</label>
+                <input type="url" id="recipeImageUrl" name="recipeImageUrl" placeholder="Image URL">
+            </div>
+            <div class="form-group">
+                <label for="recipeImageFile">Or Upload Image File:</label>
+                <input type="file" id="recipeImageFile" name="recipeImageFile" accept="images/*">
+            </div>
+            <div class="form-group">
+                <label for="recipeIngredients">Recipe Ingredients:</label>
+                <textarea id="recipeIngredients" name="recipeIngredients" rows="4" ></textarea>
+                <label for="recipeIngredientsFile">Or Upload PDF File:</label>
+                <input type="file" id="recipeIngredientsFile" name="recipeIngredientsFile" accept="application/pdf">
+            </div>
+            <div class="form-group">
+                <label for="recipeDescription">Recipe Description:</label>
+                <textarea id="recipeDescription" name="recipeDescription" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="recipeCookingProcess">Cooking Process:</label>
+                <textarea id="recipeCookingProcess" name="recipeCookingProcess" rows="6"></textarea>
+         </div>
+            <div class="form-group">
+                <label for="recipeCategory">Recipe Category:</label>
+                <select id="recipeCategory" name="recipeCategory" required>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Drinks">Drinks</option>
+                </select>
+            </div>
+            <button type="submit" class="submitbutton">Add Recipe</button>
+        </form>
+        <div id="dragDropArea">
+            <p>Drag and drop your image here, or click to select</p>
+        </div>
+    </section>
+    
+    <section id="about">
+        <div>
+            <button id="aboutButton" type="button" >Get Random Recipes</button>
+        </div>
+        <h2>Random Meals for Today</h2>
+        <div id="mealContainer">
+            <!--random recipes displayed here -->
+        </div>
+    </section>
+    
+    <!--footer -->
+    <footer id="contact">
+        <div class="contact-container">
+            <h2>Contact Us</h2>
+            <ul>
+                <li>Email: <a href="mailto:info@reciperoom.com">info@reciperoom.com</a></li>
+                <li><a href="https://twitter.com" target="_blank" rel="noopener" class="social-icon twitter">Twitter</a></li>
+                <li><a href="https://facebook.com" target="_blank" rel="noopener" class="social-icon facebook">Facebook</a></li>
+                <li><a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon instagram">Instagram</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="sampleRecipes.js"></script>
+    <script src="project2.js"></script>
+    <script src="library.js"></script>
+    <script>
+    
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
+
+</body>
+</html>

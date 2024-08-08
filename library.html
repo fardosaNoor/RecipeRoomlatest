@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Library - RecipeRoom</title>
+    <link rel="stylesheet" href="newstyles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">RecipeRoom</div>
+        <nav>
+            <ul>
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#recipes">Recipes</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="library.html" id="libraryLink">Your Library</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="library-section">
+            <div class="library-header">
+                <h2>Your Library</h2>
+            </div>
+            <div id="libraryGrid" class="recipe-grid">
+                <!-- Library recipes will be dynamically added here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Edit Recipe Modal -->
+    <div id="editRecipeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Edit Recipe</h2>
+            <form id="editRecipeForm">
+                <div class="form-group">
+                    <label for="editRecipeName">Recipe Name:</label>
+                    <input type="text" id="editRecipeName" name="editRecipeName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editRecipeImageUrl">Recipe Image URL:</label>
+                    <input type="url" id="editRecipeImageUrl" name="editRecipeImageUrl" placeholder="Image URL">
+                </div>
+                <div class="form-group">
+                    <label for="editRecipeIngredients">Recipe Ingredients:</label>
+                    <textarea id="editRecipeIngredients" name="editRecipeIngredients" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editRecipeDescription">Recipe Description:</label>
+                    <textarea id="editRecipeDescription" name="editRecipeDescription" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editRecipeCookingProcess">Cooking Process:</label>
+                    <textarea id="editRecipeCookingProcess" name="editRecipeCookingProcess" rows="6"></textarea>
+                </div>
+                <button type="submit" class="submitbutton">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="contact-container">
+            <h2>Contact Us</h2>
+            <ul>
+                <li>Email: <a href="mailto:info@reciperoom.com">info@reciperoom.com</a></li>
+                <li><a href="https://twitter.com" target="_blank" rel="noopener" class="social-icon twitter">Twitter</a></li>
+                <li><a href="https://facebook.com" target="_blank" rel="noopener" class="social-icon facebook">Facebook</a></li>
+                <li><a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon instagram">Instagram</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="library.js"></script>
+</body>
+</html>
